@@ -104,7 +104,7 @@ func (wrkr *Workr) loop() {
 			wrkr.Config.Logger.Info("Job will run", zap.Any("job", jd), zap.Any("queue_item", queueItem))
 
 			go func() {
-				if err := jn.Run(); err != nil {
+				if err := jn.Run(wrkr); err != nil {
 					wrkr.Config.Logger.Error(
 						"Error while running job",
 						zap.Error(err),

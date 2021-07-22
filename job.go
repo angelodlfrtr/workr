@@ -4,7 +4,7 @@ package workr
 type Job interface {
 	Name() string
 	New() Job
-	Run() error
+	Run(*Workr) error
 	Bytes() ([]byte, error)
 	Load(data []byte) error
 }
