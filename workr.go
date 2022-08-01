@@ -53,16 +53,13 @@ func (wrkr *Workr) Work() {
 func (wrkr *Workr) Shutdown(ctx context.Context) error {
 	wrkr.Config.Logger.Debug("Shutdown requested")
 
-	select {
-	case wrkr.stopCH <- true:
-	default:
-	}
+	close(wrkr.stopCH)
 
 	select {
 	case <-ctx.Done():
 		wrkr.Config.Logger.Debug("Shutdown done due to ctx", zap.Error(ctx.Err()))
 		return ctx.Err()
-	case wrkr.stoppedCH <- true:
+	case <-wrkr.stoppedCH:
 		wrkr.Config.Logger.Debug("Shutdown done")
 		return nil
 	}
@@ -73,7 +70,7 @@ func (wrkr *Workr) loop() {
 	for {
 		select {
 		case <-wrkr.stopCH:
-			wrkr.stoppedCH <- true
+			close(wrkr.stoppedCH)
 			return
 		default:
 		}
