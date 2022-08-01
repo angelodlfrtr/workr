@@ -101,7 +101,7 @@ func (wrkr *Workr) loop() {
 				continue
 			}
 
-			wrkr.Config.Logger.Info("Job will run", zap.Any("job", jd), zap.Any("queue_item", queueItem))
+			wrkr.Config.Logger.Debug("Job will run", zap.Any("job", jd), zap.Any("queue_item", queueItem))
 
 			go func() {
 				if err := jn.Run(wrkr); err != nil {
@@ -113,7 +113,7 @@ func (wrkr *Workr) loop() {
 					)
 				}
 
-				wrkr.Config.Logger.Info("Job done", zap.Any("job", jd), zap.Any("queue_item", queueItem))
+				wrkr.Config.Logger.Debug("Job done", zap.Any("job", jd), zap.Any("queue_item", queueItem))
 			}()
 		} else {
 			wrkr.Config.Logger.Warn("Job not recognized", zap.Any("job", jd), zap.Any("queue_item", queueItem))
